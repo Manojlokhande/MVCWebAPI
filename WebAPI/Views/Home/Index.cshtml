@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Manoj</title>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $.ajax({
+                url: 'MenuHandler.ashx',
+                method: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    buildMenu($('menu'), data);
+                    $('menu').menu();
+                }
+            });
+
+            function buildMenu(parent, items) {
+                $.each(items, function () {
+                    var li = $('<li>' + this.MenuText + '</li>');
+                    if (!this.Active) {
+                        li.addClass('ui-state-disabled');
+                    }
+                    li.appendTo(parent);
+
+                    if (this.List && this.List.length > 0) {
+                        var ul = $('<ul></ul>');
+                        ul.appendTo(li);
+                        buildMenu(li, parent);
+                    }
+                })
+            }
+        });
+    </script>
+</head>
+<body style="font-family:Arial">
+    <form id="form1">
+        <div style="width:150px">
+            <ul id="menu"></ul>
+
+        </div>
+    </form>
+
+</body>
+</html>
+
